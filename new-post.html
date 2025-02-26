@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Blog Post</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Create a New Blog Post</h2>
+        <form id="postForm">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea class="form-control" id="content" rows="5" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Image URL</label>
+                <input type="text" class="form-control" id="image_url">
+            </div>
+            <button type="submit" class="btn btn-success">Publish</button>
+        </form>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://joxgkzossddyddqtgsjh.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpveGdrem9zc2RkeWRkcXRnc2poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc3OTg2NDQsImV4cCI6MjA1MzM3NDY0NH0.6N96wyjHB2z-1AI_lS1cJmqYsQsjLG6yOo1G2b7hobc";
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        document.getElementById("postForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+        
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+            const image_url = document.getElementById("image_url").value || null;
+        
+            const { error } = await supabase.from("blog_posts").insert([{ title, content, image_url }]);
+        
+            if (error) {
+                alert("Error adding post: " + error.message);
+            } else {
+                alert("Post added successfully!");
+                window.location.href = "dashboard.html";
+            }
+        });
+        </script>
+</body>
+</html>
